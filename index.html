@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surat Digital untuk Claraaa</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(to bottom, #ffe0e9, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .surat {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.95);
+      max-width: 500px;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    h1 {
+      color: #ff6b81;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #333;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .heart {
+      font-size: 50px;
+      color: red;
+      animation: beat 1s infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    audio {
+      margin-top: 20px;
+      width: 100%;
+    }
+    footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div class="surat">
+    <div class="heart">❤️</div>
+    <h1>Surat untuk Claraaa 🐰🌸</h1>
+    <p>
+      Hai nona manis  tercinta 🥰💛,<br><br>
+      Aku cuma mau bilang terima kasih banyak<br>
+      sudah selalu ada untukku saat ini 🥰 🌟.<br><br>
+      Kamu adalah semangatku setiap hari 💪💕.<br>
+      Aku berharap kita selalu bersama<br>
+      sampai mimpi-mimpimu tercapai semangat terus yahhh 🥰 ✨🌙.<br><br>
+      Aku sayang kamu, selalu. 💖🐻
+    </p>
+
+    <audio controls autoplay loop>
+      <source src="lebih indah.mp3" type="audio/mpeg" />
+      Browser kamu tidak mendukung pemutar audio.
+    </audio>
+
+    <footer>
+      Dibuat khusus oleh aku untuk dirimu🥰🌷
+    </footer>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Resize canvas
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Flower {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 20;
+        this.size = 0;
+        this.maxSize = Math.random() * 20 + 20;
+        this.speedY = Math.random() * 1 + 0.5;
+        this.growth = Math.random() * 0.3 + 0.2;
+        this.opacity = 1;
+        this.color = `hsl(${Math.random()*360}, 80%, 70%)`;
+      }
+
+      update() {
+        if (this.size < this.maxSize) {
+          this.size += this.growth;
+        }
+        this.y -= this.speedY;
+        if (this.opacity > 0 && this.y < canvas.height / 2) {
+          this.opacity -= 0.01;
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = this.opacity;
+        ctx.translate(this.x, this.y);
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          ctx.rotate((Math.PI * 2) / 5);
+          ctx.moveTo(0, 0);
+          ctx.arc(0, -this.size / 2, this.size / 2, 0, Math.PI / 2);
+        }
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    const flowers = [];
+    function handleFlowers() {
+      flowers.push(new Flower());
+      for (let i = 0; i < flowers.length; i++) {
+        flowers[i].update();
+        flowers[i].draw();
+        if (flowers[i].opacity <= 0) {
+          flowers.splice(i, 1);
+          i--;
+        }
+      }
+    }
+
+    function animate() {
+      ctx.fillStyle = 'rgba(0,0,0,0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      handleFlowers();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
